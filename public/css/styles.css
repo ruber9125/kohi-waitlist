@@ -1,0 +1,523 @@
+@import url("tokens.css");
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Un halo ámbar muy tenue arriba, para que el negro no sea plano */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60vh;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 100% at 50% 0%,
+    rgba(217, 164, 65, 0.07),
+    transparent 70%
+  );
+}
+
+.shell {
+  width: min(100% - 2.5rem, 60rem);
+  margin-inline: auto;
+  position: relative;
+}
+
+.page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-block: clamp(2.5rem, 8vh, 5.5rem);
+}
+
+/* ---------- Marca ---------- */
+
+.mark {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 300;
+  letter-spacing: 0.55em;
+  color: var(--gold);
+  margin: 0 0 var(--space-3);
+  text-indent: 0.55em;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(4.5rem, 17vw, 9.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  margin: 0;
+  text-indent: 0.06em;
+}
+
+.brand--small {
+  font-size: clamp(2rem, 6vw, 2.75rem);
+}
+
+.tagline {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  font-weight: 200;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+  margin: var(--space-3) 0 0;
+  text-transform: none;
+}
+
+/* Filete dorado fino, el separador que se repite en todo el sitio */
+.rule {
+  width: 4rem;
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin: var(--space-4) 0;
+}
+
+.rule--center {
+  margin-inline: auto;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.philosophy {
+  max-width: 34rem;
+  color: var(--text-dim);
+  font-size: 1.02rem;
+  font-weight: 200;
+  margin: 0;
+}
+
+.philosophy em {
+  color: var(--text);
+  font-style: normal;
+}
+
+/* ---------- Botones ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 0.85rem 1.9rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
+    border-color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.btn--primary {
+  background: var(--gold);
+  color: #14110c;
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  background: var(--gold-bright);
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.btn--ghost:hover,
+.btn--ghost:focus-visible {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---------- Tarjetas y formularios ---------- */
+
+.card {
+  width: 100%;
+  max-width: 27rem;
+  margin-inline: auto;
+  padding: clamp(1.75rem, 4vw, 2.6rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.card__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 1.9rem;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.card__sub {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  font-weight: 200;
+  margin: var(--space-1) 0 var(--space-4);
+}
+
+.field {
+  margin-bottom: var(--space-3);
+}
+
+.field label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 0.5rem;
+}
+
+.field input {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  font-weight: 300;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.field input::placeholder {
+  color: var(--text-faint);
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-dim);
+}
+
+.hint {
+  font-size: 0.76rem;
+  color: var(--text-faint);
+  margin-top: 0.4rem;
+}
+
+.card__foot {
+  margin: var(--space-3) 0 0;
+  text-align: center;
+  font-size: 0.86rem;
+  color: var(--text-dim);
+}
+
+a.link {
+  color: var(--gold);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s var(--ease);
+}
+
+a.link:hover,
+a.link:focus-visible {
+  border-bottom-color: var(--gold);
+}
+
+/* ---------- Mensajes ---------- */
+
+.msg {
+  margin: 0 0 var(--space-3);
+  padding: 0.8rem 1rem;
+  border-radius: var(--radius);
+  border-left: 2px solid;
+  font-size: 0.9rem;
+}
+
+.msg--error {
+  border-color: var(--err);
+  background: rgba(224, 138, 122, 0.09);
+  color: var(--err);
+}
+
+.msg--ok {
+  border-color: var(--ok);
+  background: rgba(143, 191, 135, 0.09);
+  color: var(--ok);
+}
+
+/* ---------- Éxito del registro ---------- */
+
+.success {
+  text-align: center;
+}
+
+.success__label {
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 var(--space-2);
+}
+
+.success__title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 1.7rem;
+  margin: 0 0 var(--space-2);
+}
+
+/* ---------- Panel ---------- */
+
+.greeting {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2rem, 5vw, 2.9rem);
+  line-height: 1.15;
+  margin: 0;
+}
+
+.greeting span {
+  color: var(--gold);
+}
+
+.panel-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+  margin-top: var(--space-5);
+}
+
+@media (min-width: 46rem) {
+  .panel-grid {
+    grid-template-columns: 1.5fr 1fr;
+    align-items: start;
+  }
+}
+
+.tile {
+  padding: clamp(1.5rem, 3.5vw, 2.1rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.tile__label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 var(--space-2);
+}
+
+.queue {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.4rem, 8vw, 3.6rem);
+  line-height: 1;
+  margin: 0;
+}
+
+.queue strong {
+  color: var(--gold);
+  font-weight: 300;
+}
+
+.queue__note {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  margin: var(--space-2) 0 0;
+}
+
+/* Barra de progreso */
+.bar {
+  height: 5px;
+  margin-top: var(--space-4);
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar__fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-bright));
+  transition: width 1s var(--ease);
+}
+
+.bar__ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Código QR ficticio */
+.qr {
+  position: relative;
+  width: 100%;
+  max-width: 12.5rem;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  background-color: var(--ink-2);
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(217, 164, 65, 0.09) 0 7px,
+      transparent 7px 14px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(217, 164, 65, 0.09) 0 7px,
+      transparent 7px 14px
+    );
+}
+
+/* Los tres cuadros de esquina que hacen que "lea" como un QR */
+.qr::before,
+.qr::after {
+  content: "";
+  position: absolute;
+  top: 0.7rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 3px solid var(--gold);
+  opacity: 0.65;
+}
+
+.qr::before {
+  left: 0.7rem;
+}
+
+.qr::after {
+  right: 0.7rem;
+}
+
+.qr__code {
+  position: relative;
+  padding: 0.35rem 0.6rem;
+  background: var(--ink-2);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+
+.qr__caption {
+  margin: var(--space-3) 0 0;
+  text-align: center;
+  font-size: 0.76rem;
+  color: var(--text-faint);
+}
+
+/* ---------- Pie ---------- */
+
+.footer {
+  border-top: 1px solid var(--line-soft);
+  padding-block: var(--space-3);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--text-faint);
+}
+
+.footer .shell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: space-between;
+}
+
+.topbar {
+  border-bottom: 1px solid var(--line-soft);
+  padding-block: var(--space-3);
+}
+
+.topbar .shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.topbar a.home {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.linkish {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.2s var(--ease);
+}
+
+.linkish:hover,
+.linkish:focus-visible {
+  color: var(--gold);
+}
+
+.center {
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
