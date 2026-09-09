@@ -1,0 +1,21 @@
+{
+  "name": "kohi-waitlist",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Kohi - waitlist de inauguracion de la cafeteria de especialidad",
+  "main": "src/server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
