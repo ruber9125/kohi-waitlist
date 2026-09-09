@@ -1,9 +1,9 @@
 import { createApp } from './app.js';
 import { DB_PATH, PORT } from './config.js';
-import { initDb } from './db/connection.js';
 
-initDb();
-
+// El esquema se aplica solo, al importarse db/connection.js. Ver el comentario
+// de ese archivo: tiene que ocurrir antes de que los servicios preparen sus
+// sentencias, y eso pasa en tiempo de import.
 const app = createApp();
 
 app.listen(PORT, () => {
