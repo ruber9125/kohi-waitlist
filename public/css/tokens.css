@@ -1,0 +1,41 @@
+/* Design tokens de Kōhi. Un único sitio donde vive la paleta y la tipografía. */
+:root {
+  /* Fondos: casi negro, con dos escalones para separar superficies */
+  --ink: #0a0a09;
+  --ink-2: #111110;
+  --surface: #161514;
+  --line: #262320;
+  --line-soft: #1d1b19;
+
+  /* Texto */
+  --text: #efe9e1;
+  --text-dim: #9a9289;
+  --text-faint: #6b645c;
+
+  /* Acento dorado / ámbar */
+  --gold: #d9a441;
+  --gold-bright: #f0c368;
+  --gold-dim: rgba(217, 164, 65, 0.14);
+
+  /* Estados */
+  --ok: #8fbf87;
+  --err: #e08a7a;
+
+  /* Tipografía: serif de aire mincho para los títulos, sans ligera para el resto */
+  --font-display: "Cormorant Garamond", "Yu Mincho", "Hiragino Mincho ProN",
+    Georgia, "Times New Roman", serif;
+  --font-body: "Noto Sans JP", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+
+  /* Ritmo vertical */
+  --space-1: 0.5rem;
+  --space-2: 0.875rem;
+  --space-3: 1.25rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4.5rem;
+
+  --radius: 2px;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,64 @@
+<title>Mi panel · Kōhi</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tu posición en la lista de espera de Kōhi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Noto+Sans+JP:wght@200;300;400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/css/styles.css">
+
+<header class="topbar">
+  <div class="shell">
+    <a class="home" href="/">Kōhi</a>
+    <button class="linkish" id="logout" type="button" data-testid="logout">Cerrar sesión</button>
+  </div>
+</header>
+
+<main class="page">
+  <div class="shell">
+
+    <p id="loading" class="card__sub">Cargando tu posición…</p>
+
+    <div id="content" data-testid="dashboard" hidden>
+      <p class="mark">珈琲</p>
+      <h1 class="greeting" id="greeting" data-testid="greeting"></h1>
+
+      <div class="panel-grid">
+
+        <section class="tile">
+          <p class="tile__label">Tu posición en la cola</p>
+          <p class="queue" id="queue" data-testid="queue"></p>
+          <p class="queue__note" id="queue-note" data-testid="queue-note"></p>
+
+          <div class="bar">
+            <div class="bar__fill" id="bar-fill" data-testid="bar-fill"></div>
+          </div>
+          <div class="bar__ends">
+            <span>La puerta</span>
+            <span>Final de la cola</span>
+          </div>
+        </section>
+
+        <section class="tile center">
+          <p class="tile__label">Tu invitación</p>
+          <div class="qr" data-testid="qr">
+            <span class="qr__code" id="qr-code" data-testid="qr-code"></span>
+          </div>
+          <p class="qr__caption">Enséñalo en la barra el día de la apertura.</p>
+        </section>
+
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <span>Kōhi · Café de especialidad</span>
+    <span>Próxima apertura</span>
+  </div>
+</footer>
+
+<script type="module" src="/js/dashboard.js"></script>
