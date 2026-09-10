@@ -1,0 +1,11 @@
+# Finales de línea LF en el repositorio y en el working tree, sea cual sea el
+# sistema operativo. Sin esto, git en Windows convierte a CRLF al hacer
+# checkout y avisa en cada commit; con gente clonando desde Mac o Linux
+# acabarían colándose finales de línea inconsistentes en el historial.
+* text=auto eol=lf
+
+# Binarios: git no debe intentar normalizarlos nunca.
+*.png binary
+*.jpg binary
+*.ico binary
+*.db binary

@@ -7,6 +7,33 @@ ve su posición en la cola y un código QR ficticio de invitación.
 El proyecto es, además, una demostración didáctica de **tres servidores MCP
 trabajando juntos**: GitHub, SQLite y Playwright.
 
+## La web
+
+![Landing de Kōhi: el nombre en grande sobre fondo casi negro, el subtítulo "Café de especialidad. Próxima apertura." y dos botones, "Unirme a la lista" y "Ya tengo cuenta"](docs/capturas/landing.png)
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="docs/capturas/registro.png" alt="Formulario de registro con los campos de nombre, email, contraseña y confirmación">
+    </td>
+    <td width="50%">
+      <img src="docs/capturas/panel.png" alt="Panel privado con el saludo, la posición en la cola, una barra de progreso y el código QR de invitación">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><b>Registro</b> — alta en la lista de espera</td>
+    <td align="center"><b>Panel</b> — posición en la cola, barra de progreso y QR</td>
+  </tr>
+</table>
+
+Al registrarte, el servidor te asigna la siguiente posición libre y el panel te
+dice cuánta gente tienes por delante. El código QR es ficticio: se construye
+solo con CSS y codifica el identificador de la persona.
+
+> Kōhi no está desplegado en ningún sitio: lleva backend propio y base de datos,
+> así que hay que levantarlo en local. Las instrucciones están más abajo, en
+> [Puesta en marcha](#puesta-en-marcha).
+
 ## Los tres MCPs
 
 | MCP | Papel en el proyecto |

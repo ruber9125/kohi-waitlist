@@ -5,6 +5,7 @@ const msg = document.querySelector("#msg");
 const submit = document.querySelector("#submit");
 const formBlock = document.querySelector("#form-block");
 const successBlock = document.querySelector("#success-block");
+const successTitle = document.querySelector("#success-title");
 const positionOut = document.querySelector("#position");
 
 const MIN_PASSWORD = 8;
@@ -57,6 +58,12 @@ form.addEventListener("submit", async (event) => {
     positionOut.textContent = `Tu posición: #${data.position}`;
     formBlock.hidden = true;
     successBlock.hidden = false;
+
+    // El boton que tenia el foco acaba de ocultarse. Sin esto el foco cae al
+    // body y quien navega con teclado o lector de pantalla no recibe ningun
+    // aviso de que la pagina ha cambiado.
+    document.title = "¡Estás en la lista! · Kōhi";
+    successTitle.focus();
   } catch (err) {
     showError(err.message);
     submit.disabled = false;
