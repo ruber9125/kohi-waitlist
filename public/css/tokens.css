@@ -10,7 +10,8 @@
   /* Texto */
   --text: #efe9e1;
   --text-dim: #9a9289;
-  --text-faint: #6b645c;
+  /* Minimo 4.5:1 sobre --surface (4.83:1) y sobre --ink (5.25:1), WCAG AA. */
+  --text-faint: #8b8278;
 
   /* Acento dorado / ámbar */
   --gold: #d9a441;
