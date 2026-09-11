@@ -6,6 +6,8 @@ services:
   - type: web
     name: kohi-waitlist
     runtime: node
+
+    # No quitar: sin esto Render podría asignar un plan de pago.
     plan: free
     region: oregon
 
@@ -14,15 +16,7 @@ services:
     buildCommand: npm ci --omit=dev
     startCommand: npm start
 
-    # Render consulta esta ruta para saber si el despliegue ha arrancado bien.
-    healthCheckPath: /api/health
-
     envVars:
-      # bcrypt y better-sqlite3 son módulos nativos: conviene fijar la versión
-      # de Node para que los binarios precompilados que descargan coincidan.
-      - key: NODE_VERSION
-        value: 22.11.0
-
       # Activa el guardarraíl de src/config.js: sin JWT_SECRET, no arranca.
       - key: NODE_ENV
         value: production
@@ -41,3 +35,15 @@ services:
       # bastaría con apuntar esta variable a su punto de montaje.
       - key: KOHI_DB_PATH
         value: ./kohi.db
+
+# Notas sobre dos ajustes que estuvieron aquí y se quitaron a propósito:
+#
+# - NODE_VERSION: fijaba 22.11.0. Innecesario: bcrypt y better-sqlite3 usan
+#   N-API, cuyos binarios precompilados funcionan en cualquier versión de Node
+#   sin recompilar. Fijar una versión exacta solo añade un punto de fallo si esa
+#   versión no está disponible en la imagen de Render.
+#
+# - healthCheckPath: apuntaba a /api/health. Es útil en producción seria, pero
+#   convierte cualquier demora del arranque en un despliegue marcado como
+#   fallido. Sin él, Render da el servicio por vivo en cuanto el proceso escucha
+#   en su puerto, que es lo que interesa aquí.
