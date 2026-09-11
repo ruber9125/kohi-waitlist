@@ -1,5 +1,12 @@
 # Kōhi
 
+### ▶ [Pruébalo en vivo — kohi-waitlist.onrender.com](https://kohi-waitlist.onrender.com)
+
+> La primera visita puede tardar unos 50 segundos: el plan gratuito de Render
+> suspende el servicio cuando lleva un rato sin tráfico y tiene que rearrancarlo.
+> Después va inmediato. La lista de espera se vacía en cada redespliegue, así que
+> puedes registrarte sin reparos.
+
 Web de una cafetería de especialidad que está a punto de abrir. Quien se registra
 entra en la lista de espera de la inauguración y accede a un panel privado donde
 ve su posición en la cola y un código QR ficticio de invitación.
@@ -30,9 +37,11 @@ Al registrarte, el servidor te asigna la siguiente posición libre y el panel te
 dice cuánta gente tienes por delante. El código QR es ficticio: se construye
 solo con CSS y codifica el identificador de la persona.
 
-> Kōhi lleva servidor y base de datos propios, así que no puede publicarse en
-> GitHub Pages, que solo sirve archivos estáticos. Para verlo funcionando,
-> [levántalo en local](#puesta-en-marcha) o [despliégalo en Render](#despliegue).
+Puedes verlo funcionando en [kohi-waitlist.onrender.com](https://kohi-waitlist.onrender.com)
+o [levantarlo en local](#puesta-en-marcha). Kōhi lleva servidor y base de datos
+propios, así que no puede publicarse en GitHub Pages, que solo sirve archivos
+estáticos; está desplegado en Render, y el [blueprint](render.yaml) que lo hace
+posible viene en el repositorio.
 
 ## Los tres MCPs
 
