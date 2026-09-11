@@ -1,7 +1,14 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { JWT_EXPIRES_IN, JWT_SECRET, MIN_PASSWORD_LENGTH } from '../config.js';
+import {
+  JWT_EXPIRES_IN,
+  JWT_SECRET,
+  MAX_EMAIL_LENGTH,
+  MAX_NAME_LENGTH,
+  MAX_PASSWORD_BYTES,
+  MIN_PASSWORD_LENGTH,
+} from '../config.js';
 import { badRequest, conflict, unauthorized } from '../middleware/errors.js';
 import { loginLimiter, registerLimiter } from '../middleware/rateLimit.js';
 import { requireAuth } from '../middleware/requireAuth.js';
@@ -35,6 +42,33 @@ function readCredentials(body, { requireName }) {
 
   if (missing.length > 0) {
     throw badRequest(`Faltan campos obligatorios: ${missing.join(', ')}`, 'MISSING_FIELDS');
+  }
+
+  // Topes de tamano. Sin ellos el unico limite seria el del cuerpo de la
+  // peticion, asi que un nombre de varios kilobytes acabaria almacenado tal
+  // cual en la base.
+  if (requireName && name.length > MAX_NAME_LENGTH) {
+    throw badRequest(
+      `El nombre no puede pasar de ${MAX_NAME_LENGTH} caracteres`,
+      'NAME_TOO_LONG'
+    );
+  }
+
+  if (email.length > MAX_EMAIL_LENGTH) {
+    throw badRequest(
+      `El email no puede pasar de ${MAX_EMAIL_LENGTH} caracteres`,
+      'EMAIL_TOO_LONG'
+    );
+  }
+
+  // En bytes, no en caracteres: bcrypt cuenta bytes, y las tildes ocupan dos.
+  // Rechazar es mejor que dejar que bcrypt trunque por su cuenta, porque el
+  // truncado no avisa y da una falsa sensacion de seguridad.
+  if (Buffer.byteLength(password, 'utf8') > MAX_PASSWORD_BYTES) {
+    throw badRequest(
+      `La contrasena no puede pasar de ${MAX_PASSWORD_BYTES} bytes`,
+      'PASSWORD_TOO_LONG'
+    );
   }
 
   return { name, email, password };

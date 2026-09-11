@@ -115,8 +115,12 @@ entrar como otra persona.
 | `GET` | `/api/me` | Bearer | Nombre, email, posición y total de la lista |
 | `GET` | `/api/health` | — | Sonda de vida |
 
-Errores: `400` campos faltantes o inválidos, `401` credenciales incorrectas o
-token ausente/caducado, `409` email ya registrado, `429` demasiadas peticiones.
+Errores: `400` campos faltantes, inválidos o JSON mal formado, `401` credenciales
+incorrectas o token ausente/caducado, `404` ruta inexistente, `409` email ya
+registrado, `413` cuerpo demasiado grande, `429` demasiadas peticiones.
+
+Las rutas bajo `/api` responden siempre en JSON. El resto —una dirección mal
+tecleada, por ejemplo— devuelve una página de error, no un objeto en bruto.
 
 El login responde lo mismo si el email no existe que si la contraseña falla, para
 no permitir enumerar qué correos están registrados.
@@ -135,6 +139,39 @@ toda la aplicación, no solo al login.
 Los valores se configuran por entorno (`RATE_LIMIT_LOGIN_MAX`,
 `RATE_LIMIT_REGISTER_MAX` y sus ventanas), lo que permite a los tests levantar
 un servidor con un límite diminuto y comprobar que corta de verdad.
+
+### Límites de los campos
+
+| Campo | Límite | Por qué |
+|---|---|---|
+| `name` | 80 caracteres | |
+| `email` | 254 caracteres | Máximo del estándar, RFC 5321 |
+| `password` | 8 a **72 bytes** | Es lo que bcrypt tiene en cuenta |
+
+El tope de la contraseña se mide en **bytes, no en caracteres**, y ese detalle
+importa: bcrypt descarta en silencio todo lo que pase de 72 bytes. Sin este
+límite, dos frases de contraseña distintas que coincidieran en sus primeros 72
+bytes abrían la misma cuenta, y quien usara una frase larga creía estar más
+protegido de lo que estaba. Contar caracteres tampoco bastaría: una `ñ` ocupa
+dos bytes, así que 40 caracteres acentuados ya superan el límite.
+
+## Seguridad
+
+Además de bcrypt para las contraseñas y del [límite de peticiones](#límite-de-peticiones):
+
+- **Cabeceras de `helmet`**, con una política de contenido (CSP) ajustada a lo
+  que la web usa de verdad: scripts solo del propio dominio —sin
+  `'unsafe-inline'`—, y Google Fonts permitido explícitamente. Un test navega la
+  landing y falla si aparece cualquier error en consola, que es como se
+  manifiesta una CSP demasiado estricta.
+- **`frame-ancestors 'none'`**, para que nadie pueda embeber el sitio en un
+  iframe y montar un clickjacking encima.
+- **Sin `X-Powered-By`**: no hay motivo para anunciar el stack.
+- **Cuerpos limitados a 10 kB**, holgado para lo que acepta la API.
+- El login **responde lo mismo** si el email no existe que si la contraseña
+  falla, para no permitir enumerar qué correos están registrados.
+- Ninguna respuesta de la API incluye el hash: todo lo que sale pasa por una
+  proyección explícita, y hay un test que lo rastrea.
 
 ## Esquema
 
