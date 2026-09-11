@@ -1,0 +1,43 @@
+# Blueprint de Render. Con este archivo en la raíz del repositorio, Render
+# configura el servicio solo: no hay que rellenar nada a mano en su panel.
+#
+# Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: kohi-waitlist
+    runtime: node
+    plan: free
+    region: oregon
+
+    # --omit=dev deja fuera @playwright/test, que son ~100 MB de runner y
+    # navegadores que el servidor de producción no necesita para nada.
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+
+    # Render consulta esta ruta para saber si el despliegue ha arrancado bien.
+    healthCheckPath: /api/health
+
+    envVars:
+      # bcrypt y better-sqlite3 son módulos nativos: conviene fijar la versión
+      # de Node para que los binarios precompilados que descargan coincidan.
+      - key: NODE_VERSION
+        value: 22.11.0
+
+      # Activa el guardarraíl de src/config.js: sin JWT_SECRET, no arranca.
+      - key: NODE_ENV
+        value: production
+
+      # Render genera un valor aleatorio en el primer despliegue y lo conserva
+      # entre despliegues. Nunca aparece en el repositorio.
+      - key: JWT_SECRET
+        generateValue: true
+
+      - key: JWT_EXPIRES_IN
+        value: 2h
+
+      # El plan gratuito no admite discos persistentes, así que la base vive en
+      # el sistema de archivos efímero del contenedor y se reinicia con cada
+      # despliegue o suspensión. Con un plan de pago se añadiría un disco y
+      # bastaría con apuntar esta variable a su punto de montaje.
+      - key: KOHI_DB_PATH
+        value: ./kohi.db

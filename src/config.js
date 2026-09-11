@@ -8,7 +8,22 @@ export const ROOT_DIR = resolve(__dirname, '..');
 
 export const PORT = Number(process.env.PORT ?? 3000);
 
-export const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-secret-cambiar-en-produccion';
+export const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
+const SECRETO_DE_DESARROLLO = 'dev-secret-cambiar-en-produccion';
+
+// Este valor por defecto esta escrito en un repositorio publico: quien lo lea
+// puede firmar un JWT valido y entrar como cualquiera. Es aceptable en local,
+// nunca en un servidor accesible desde internet, asi que en produccion el
+// arranque falla en vez de continuar con una sesion falsificable.
+if (IS_PRODUCTION && !process.env.JWT_SECRET) {
+  throw new Error(
+    'Falta JWT_SECRET. En produccion es obligatorio: define la variable de ' +
+      'entorno con un valor largo y aleatorio antes de arrancar.'
+  );
+}
+
+export const JWT_SECRET = process.env.JWT_SECRET ?? SECRETO_DE_DESARROLLO;
 export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN ?? '2h';
 
 /**

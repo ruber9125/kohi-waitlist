@@ -30,9 +30,9 @@ Al registrarte, el servidor te asigna la siguiente posición libre y el panel te
 dice cuánta gente tienes por delante. El código QR es ficticio: se construye
 solo con CSS y codifica el identificador de la persona.
 
-> Kōhi no está desplegado en ningún sitio: lleva backend propio y base de datos,
-> así que hay que levantarlo en local. Las instrucciones están más abajo, en
-> [Puesta en marcha](#puesta-en-marcha).
+> Kōhi lleva servidor y base de datos propios, así que no puede publicarse en
+> GitHub Pages, que solo sirve archivos estáticos. Para verlo funcionando,
+> [levántalo en local](#puesta-en-marcha) o [despliégalo en Render](#despliegue).
 
 ## Los tres MCPs
 
@@ -66,6 +66,37 @@ La base de datos se crea sola en el primer arranque aplicando
 > `bcrypt` y `better-sqlite3` son módulos nativos. Si tu npm bloquea los scripts
 > de instalación, apruébalos con
 > `npm install-scripts approve bcrypt better-sqlite3`.
+
+## Despliegue
+
+El repositorio incluye [`render.yaml`](render.yaml), un blueprint de
+[Render](https://render.com) que describe el servicio entero. No hay que
+rellenar nada a mano:
+
+1. En Render, **New → Blueprint**.
+2. Conecta este repositorio y confirma.
+
+Render instala las dependencias de producción, arranca `npm start` y comprueba
+`/api/health` antes de dar el despliegue por bueno. `JWT_SECRET` se genera solo,
+con un valor aleatorio que nunca pasa por el repositorio.
+
+Tres cosas que conviene saber del plan gratuito:
+
+- **El servicio se suspende tras un rato sin visitas.** La primera petición
+  después de la suspensión tarda unos 50 segundos en responder mientras el
+  contenedor vuelve a arrancar.
+- **La base de datos es efímera.** El plan gratuito no admite discos
+  persistentes, así que la lista de espera se vacía en cada despliegue o
+  suspensión. Para conservarla hay que añadir un disco de pago y apuntar
+  `KOHI_DB_PATH` a su punto de montaje.
+- **No hay límite de intentos de acceso.** Para una demo no importa; si esto
+  fuera a producción de verdad, `/api/login` necesitaría un rate limit.
+
+En producción, `NODE_ENV=production` activa un guardarraíl en
+[`src/config.js`](src/config.js): si falta `JWT_SECRET`, el servidor **no
+arranca**. El valor por defecto de desarrollo está escrito en este repositorio
+público, y arrancar con él permitiría a cualquiera firmar un token válido y
+entrar como otra persona.
 
 ## API
 
