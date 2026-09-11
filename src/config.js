@@ -42,6 +42,23 @@ export const BCRYPT_ROUNDS = 12;
 export const MIN_PASSWORD_LENGTH = 8;
 
 /**
+ * bcrypt solo tiene en cuenta los primeros 72 bytes de la contrasena y
+ * descarta el resto en silencio. Sin este tope, quien usara una frase de
+ * contrasena larga creeria estar mas protegido de lo que esta: dos frases
+ * distintas que coincidan en sus primeros 72 bytes abren la misma cuenta.
+ *
+ * Se mide en bytes y no en caracteres a proposito: una "n" ocupa dos bytes en
+ * UTF-8, asi que contar caracteres dejaria pasar contrasenas que bcrypt si
+ * truncaria.
+ */
+export const MAX_PASSWORD_BYTES = 72;
+
+/** Limite del estandar para una direccion de correo (RFC 5321). */
+export const MAX_EMAIL_LENGTH = 254;
+
+export const MAX_NAME_LENGTH = 80;
+
+/**
  * Saltos de proxy en los que confiar para deducir la IP del cliente.
  *
  * Render sirve la aplicacion detras de su proxy, asi que sin esto todas las
