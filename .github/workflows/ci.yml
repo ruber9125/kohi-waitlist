@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Si llegan dos pushes seguidos a la misma rama, cancela el primero: no interesa
+# gastar minutos verificando un commit que ya quedó atrás.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Tests E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      # npm ci y no npm install: instala exactamente lo que fija el lockfile y
+      # falla si package.json y package-lock.json se han desincronizado.
+      - name: Instalar dependencias
+        run: npm ci
+
+      # --with-deps trae también las librerías de sistema que necesita el
+      # navegador en una imagen limpia de Ubuntu.
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Ejecutar la suite
+        run: npm run test:e2e
+
+      # El informe HTML con trazas y capturas del fallo. Se sube siempre que el
+      # job no haya sido cancelado, porque es justo cuando falla cuando hace
+      # falta: sin esto, un fallo que no se reproduce en local se queda sin
+      # pruebas que mirar.
+      - name: Guardar el informe de Playwright
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

@@ -1,5 +1,7 @@
 # Kōhi
 
+[![CI](https://github.com/ruber9125/kohi-waitlist/actions/workflows/ci.yml/badge.svg)](https://github.com/ruber9125/kohi-waitlist/actions/workflows/ci.yml)
+
 ### ▶ [Pruébalo en vivo — kohi-waitlist.onrender.com](https://kohi-waitlist.onrender.com)
 
 > La primera visita puede tardar unos 50 segundos: el plan gratuito de Render
@@ -98,9 +100,6 @@ Tres cosas que conviene saber del plan gratuito:
   persistentes, así que la lista de espera se vacía en cada despliegue o
   suspensión. Para conservarla hay que añadir un disco de pago y apuntar
   `KOHI_DB_PATH` a su punto de montaje.
-- **No hay límite de intentos de acceso.** Para una demo no importa; si esto
-  fuera a producción de verdad, `/api/login` necesitaría un rate limit.
-
 En producción, `NODE_ENV=production` activa un guardarraíl en
 [`src/config.js`](src/config.js): si falta `JWT_SECRET`, el servidor **no
 arranca**. El valor por defecto de desarrollo está escrito en este repositorio
@@ -117,10 +116,25 @@ entrar como otra persona.
 | `GET` | `/api/health` | — | Sonda de vida |
 
 Errores: `400` campos faltantes o inválidos, `401` credenciales incorrectas o
-token ausente/caducado, `409` email ya registrado.
+token ausente/caducado, `409` email ya registrado, `429` demasiadas peticiones.
 
 El login responde lo mismo si el email no existe que si la contraseña falla, para
 no permitir enumerar qué correos están registrados.
+
+### Límite de peticiones
+
+`/api/login` y `/api/register` están limitados por IP, con contadores
+independientes: **10 accesos cada 15 minutos** y **5 altas por hora**. Al
+superarlos la API responde `429` con una cabecera `Retry-After`.
+
+El acceso se limita más fuerte porque es el objetivo natural de la fuerza bruta
+y porque cada intento cuesta unos 250 ms de CPU en bcrypt. Sin freno, unas pocas
+peticiones por segundo agotan el *threadpool* de libuv y dejan sin responder a
+toda la aplicación, no solo al login.
+
+Los valores se configuran por entorno (`RATE_LIMIT_LOGIN_MAX`,
+`RATE_LIMIT_REGISTER_MAX` y sus ventanas), lo que permite a los tests levantar
+un servidor con un límite diminuto y comprobar que corta de verdad.
 
 ## Esquema
 

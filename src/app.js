@@ -1,11 +1,15 @@
 import express from 'express';
 
-import { PUBLIC_DIR } from './config.js';
+import { PUBLIC_DIR, TRUST_PROXY } from './config.js';
 import { errorHandler, notFoundHandler } from './middleware/errors.js';
 import authRoutes from './routes/auth.routes.js';
 
 export function createApp() {
   const app = express();
+
+  // Necesario para que los limitadores vean la IP real del visitante y no la
+  // del proxy de Render. Ver el comentario de TRUST_PROXY en config.js.
+  app.set('trust proxy', TRUST_PROXY);
 
   app.use(express.json());
 
