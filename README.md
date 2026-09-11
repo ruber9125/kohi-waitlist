@@ -127,7 +127,7 @@ npx playwright install chromium   # solo la primera vez
 npm run test:e2e
 ```
 
-38 tests de extremo a extremo sobre un navegador real, repartidos en siete
+38 tests de extremo a extremo sobre un navegador real, repartidos en nueve
 archivos: landing, registro, acceso, panel, posiciones en la cola, seguridad,
 límite de peticiones, cabeceras y validación.
 
@@ -224,6 +224,8 @@ CREATE TABLE waitlist (
   position      INTEGER,
   created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_waitlist_position ON waitlist(position);
 ```
 
 La posición se calcula como `MAX(position) + 1` **dentro de una transacción**: si
@@ -286,8 +288,13 @@ public/
   css/                   tokens.css (paleta y tipografía) + styles.css
   js/                    api.js compartido + un script por página
 tests/
-  e2e/                   siete archivos de especificaciones
+  e2e/                   nueve archivos de especificaciones
+  fixtures/              generador de usuarios únicos
   helpers/               acceso a la base, flujos comunes y limpieza previa
+.github/workflows/
+  ci.yml                 instala, monta Chromium y ejecuta la suite
+playwright.config.js     dos servidores de test y sus bases
+render.yaml              blueprint del despliegue
 ```
 
 ## Licencia
