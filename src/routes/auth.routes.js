@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import { JWT_EXPIRES_IN, JWT_SECRET, MIN_PASSWORD_LENGTH } from '../config.js';
 import { badRequest, conflict, unauthorized } from '../middleware/errors.js';
+import { loginLimiter, registerLimiter } from '../middleware/rateLimit.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 import {
   countEntries,
@@ -39,7 +40,7 @@ function readCredentials(body, { requireName }) {
   return { name, email, password };
 }
 
-router.post('/register', async (req, res, next) => {
+router.post('/register', registerLimiter, async (req, res, next) => {
   try {
     const { name, email, password } = readCredentials(req.body, { requireName: true });
 
@@ -73,7 +74,7 @@ router.post('/register', async (req, res, next) => {
   }
 });
 
-router.post('/login', async (req, res, next) => {
+router.post('/login', loginLimiter, async (req, res, next) => {
   try {
     const { email, password } = readCredentials(req.body, { requireName: false });
 
