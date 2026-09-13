@@ -8,5 +8,7 @@ playwright-report/
 .mcp.json.bak
 .mcp.json.pre-fix
 .playwright-mcp/
-kohi-*.png
-evidencia-*.png
+# Capturas sueltas en la raiz: son artefactos de verificacion del MCP de
+# Playwright, no del proyecto. Las del README viven en docs/capturas/ y esta
+# regla no las toca, porque la barra inicial la limita a la raiz.
+/*.png
